@@ -15,9 +15,9 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-console.log(getCookie('accessToken'));
 console.log(getCookie('email'));
 console.log(getCookie('password'));
+console.log(getCookie('accessToken'));
 
 // Function to set a cookie
 function setCookie(name, value, days) {
