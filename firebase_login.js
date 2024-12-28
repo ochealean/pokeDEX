@@ -59,7 +59,7 @@ if (!(getCookie('accessToken') || (getCookie('email') && getCookie('password')))
                         setCookie("accessToken", idToken, 7);
                         setCookie("email", email, 7);
                         setCookie("password", password, 7);
-                        alert("User Logged In Successfully");
+                        alert("User Logged In Successfully!");
                         window.location.href = 'mainpage.html';
                     }).catch((error) => {
                         console.error("Error getting access token:", error);
