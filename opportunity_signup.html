@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup Page</title>
+    <style>
+        a {
+            text-decoration: none;
+            color: black;
+            border: 1px solid black;
+            width: 80px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <a href="opportunity_login.html">Login</a>
+    <form id="signupForm">
+        <label for="firstname">firstname:</label>
+        <input id="firstname" type="text" name="firstname" required><br>
+        <label for="lastname">lastname:</label>
+        <input id="lastname" type="text" name="lastname" required><br>
+        <label for="email">email:</label>
+        <input id="email" type="email" name="email" required><br>
+        <label for="password">password:</label>
+        <input id="password" type="password" name="password" required><br>
+        <button id="registerButton" type="submit">submit</button>
+    </form>
+    <script src="firebase_signup.js" type="module"></script>
+</body>
+</html>

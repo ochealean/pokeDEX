@@ -1,0 +1,200 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, updateProfile, sendEmailVerification} from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyAtwT5vh0VSYQ3j-qDSjHFI3DsfdzRoCpw",
+    authDomain: "opportunity-9d3bf.firebaseapp.com",
+    databaseURL: "https://opportunity-9d3bf-default-rtdb.firebaseio.com",
+    projectId: "opportunity-9d3bf",
+    storageBucket: "opportunity-9d3bf.firebasestorage.app",
+    messagingSenderId: "57906230058",
+    appId: "1:57906230058:web:4bd2c2b66a97ad34536453",
+    measurementId: "G-NNMZ1KHB32"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+const firstname = document.getElementById("firstname");
+const lastname = document.getElementById("lastname");
+const email = document.getElementById("email");
+const password = document.getElementById("password");
+
+document.getElementById("registerButton").addEventListener("click", () => {
+    console.log(firstname.value);
+    const firstnameVAL = firstname.value;
+    const lastnameVAL = lastname.value;
+    const emailVAL = email.value;
+    const passwordVAL = password.value;
+
+    const auth = getAuth();
+    createUserWithEmailAndPassword(auth, emailVAL, passwordVAL)
+    .then((userCredential) => {
+        const user = userCredential.user;
+
+        sendEmailVerification(auth.currentUser)
+            .then(() => {
+                alert("Email Verification Sent");
+            })
+            .catch((error) => {
+                alert("email not sent");
+            });
+
+        updateProfile(user, {
+            displayName: `${firstnameVAL} ${lastnameVAL}`
+        })
+        .then(() => {
+            alert("User Registered Successfully");
+        })
+        .catch((error) => {
+            alert(error.message);
+        })
+    })
+    .catch((error) => {
+        alert('Account is lready exist');
+    });
+    alert(123);
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// *****************************************************
+
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-analytics.js";
+import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+import { getAuth, createUserWithEmailAndPassword, updateProfile, sendEmailVerification} from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+
+// ID generator
+function generateRandomString(length) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyAtwT5vh0VSYQ3j-qDSjHFI3DsfdzRoCpw",
+    authDomain: "opportunity-9d3bf.firebaseapp.com",
+    databaseURL: "https://opportunity-9d3bf-default-rtdb.firebaseio.com",
+    projectId: "opportunity-9d3bf",
+    storageBucket: "opportunity-9d3bf.firebasestorage.app",
+    messagingSenderId: "57906230058",
+    appId: "1:57906230058:web:4bd2c2b66a97ad34536453",
+    measurementId: "G-NNMZ1KHB32"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const database = getDatabase(app);
+
+document.getElementById('signupForm').addEventListener("submit", submitForm);
+
+function submitForm(e) {
+    e.preventDefault();
+    // const userID = generateRandomString(15);
+    // const opportunityDB = ref(database, 'opportunity_db/users/' + userID);
+
+    // var ID = userID;
+    // var firstname = getValue('firstname');
+    // var lastname = getValue('lastname');
+    // var email = getValue('email');
+    // var password = getValue('password');
+
+    // insertData(ID, firstname, lastname, email, password);
+
+    // alert('Account created');
+
+    // no app in getAuth
+    const auth = getAuth();
+    createUserWithEmailAndPassword(auth, getValue('email'), getValue('password'))
+    .then((userCredential) => {
+        const user = userCredential.user;
+        
+        updateProfile(user, {
+            displayName: getValue('firstname') + ' ' + getValue('lastname')
+        }).then(() => {
+            // Profile updated!
+            alert("User Registered Successfully");
+        }).catch((error) => {
+            // An error occurred
+            alert("User Registered Failed");
+        });
+
+        // suppposedly user yung nakalagay at hindi auth.currentUser
+        sendEmailVerification(auth.currentUser)
+        .then(() => {
+            // Email verification sent!
+            alert("Verification Email Sent");
+            displayName = getValue('firstname') + ' ' + getValue('lastname');
+        })
+        .catch((error) => {
+            // An error occurred
+            console.log('verification email not sent');
+        });
+        alert('Account created');
+    })
+    .catch(() => {
+        alert('Account is lready exist');
+    });
+}
+
+// function insertData(ID, firstname, lastname, email, password) {
+//     set(ref(database, 'opportunity_db/users/' + ID), {
+//         ID: ID,
+//         firstname: firstname,
+//         lastname: lastname,
+//         email: email,
+//         password: password
+//     });
+// }
+
+function getValue(id) {
+    return document.getElementById(id).value;
+}

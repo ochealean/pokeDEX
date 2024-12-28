@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        a{
+            text-decoration: none;
+            color:black;
+            border: 1px solid black;
+            width: 80px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <a href="opportunity_signup.html">Signup</a>
+    <form id="loginForm">
+        <label for="email">email:</label>
+        <input id="email" type="text" name="email" required><br>
+        <label for="password">password:</label>
+        <input id="password" type="password" name="password" required><br>
+        <button id="button_get" type="submit">Login</button>
+    </form>
+    <button id="google_login">Log in with Google</button>
+    <script src="firebase_login.js" type="module"></script>
+</body>
+</html>
