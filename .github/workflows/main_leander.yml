@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy Node.js app to Azure Web App - leander
+name: Build and deploy PHP app to Azure Web App - leander
 
 on:
   push:
@@ -11,29 +11,36 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     permissions:
       contents: read #This is required for actions/checkout
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Node.js version
-        uses: actions/setup-node@v3
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
         with:
-          node-version: '20.x'
+          php-version: '8.2'
 
-      - name: npm install, build, and test
-        run: |
-          npm install
-          npm run build --if-present
-          npm run test --if-present
-      
+      - name: Check if composer.json exists
+        id: check_files
+        uses: andstor/file-existence-action@v1
+        with:
+          files: 'composer.json'
+
+      - name: Run composer install if composer.json exists
+        if: steps.check_files.outputs.files_exists == 'true'
+        run: composer validate --no-check-publish && composer install --prefer-dist --no-progress
+
+      - name: Zip artifact for deployment
+        run: zip release.zip ./* -r
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
-          name: node-app
-          path: .
+          name: php-app
+          path: release.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -49,14 +56,17 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: node-app
+          name: php-app
+
+      - name: Unzip artifact for deployment
+        run: unzip release.zip
       
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_577AC42957014968936DD511C577F092 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_3F58ACE7EB084A43836DC20C5D7CC70B }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_63D2F71567D843EB884AC00E395FE34F }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_FB5872979CB54D099AA31415CA8040FA }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_F751A8BA0B084B17B9A35FCFE135D4FD }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_23595EECFB4B44E19A899C77CE0ADC31 }}
 
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
